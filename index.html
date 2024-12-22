@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Media Viewer & Editor</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <h1>Media Viewer & Editor</h1>
+
+    <!-- Text Section -->
+    <div id="text-section">
+        <h2>Text Editor</h2>
+        <textarea id="text-editor" rows="6" cols="50"></textarea>
+        <button id="save-text">Save Text</button>
+        <p id="saved-text"></p>
+    </div>
+
+    <!-- Image Section -->
+    <div id="image-section">
+        <h2>Image Viewer & Uploader</h2>
+        <input type="file" id="image-input" accept="image/*">
+        <img id="image-preview" alt="Image Preview" width="300">
+    </div>
+
+    <!-- Video Section -->
+    <div id="video-section">
+        <h2>Video Viewer & Uploader</h2>
+        <input type="file" id="video-input" accept="video/*">
+        <video id="video-preview" width="300" controls></video>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
