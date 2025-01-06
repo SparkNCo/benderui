@@ -5,32 +5,46 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Media Viewer & Editor</title>
     <link rel="stylesheet" href="styles.css">
+    <link href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css" rel="stylesheet">
+    <script src="script.js"></script>
+
 </head>
 <body>
-    <h1>Media Viewer & Editor</h1>
+    
+    <div class="container">
+        <div class="is-flex is-justify-content-space-between mt-4">
+            <h1 class="is-size-2">Sofia</h1>
+            <button class="button mt-4 is-dark" id="save-text">Save</button>
+        </div>
 
-    <!-- Text Section -->
-    <div id="text-section">
-        <h2>Text Editor</h2>
-        <textarea id="text-editor" rows="6" cols="50"></textarea>
-        <button id="save-text">Save Text</button>
-        <p id="saved-text"></p>
+        <div id="text-section">
+
+            <h2 class="is-size-4 mt-4">Backstory</h2>
+            <textarea id="backstory" class="textarea" placeholder="Who am I?"></textarea>
+
+            <h2 class="is-size-4 mt-4">Tone</h2>
+            <textarea id="tone" class="textarea" placeholder="How should I communicate?"></textarea>
+
+            <h2 class="is-size-4 mt-4">Rules</h2>
+            <input class="input" type="text" placeholder="What should I make sure to do?" />
+            <button class="button mt-4 is-light" id="save-text">Add Rule</button>
+
+        </div>
+
+        <!-- Image Section -->
+        <div id="image-section">
+            <h2 class="is-size-4 mt-4">Upload Images</h2>
+            <div class="file">
+                <label class="file-label mt-4"">
+                    <input class="file-input" type="file" id="image-input" accept="image/*">
+                    <span class="file-cta">
+                    <span class="file-label"> Select Files </span>
+                    </span>
+                </label>
+            </div>
+                
+        </div>
     </div>
 
-    <!-- Image Section -->
-    <div id="image-section">
-        <h2>Image Viewer & Uploader</h2>
-        <input type="file" id="image-input" accept="image/*">
-        <img id="image-preview" alt="Image Preview" width="300">
-    </div>
-
-    <!-- Video Section -->
-    <div id="video-section">
-        <h2>Video Viewer & Uploader</h2>
-        <input type="file" id="video-input" accept="video/*">
-        <video id="video-preview" width="300" controls></video>
-    </div>
-
-    <script src="script.js"></script>
 </body>
 </html>
