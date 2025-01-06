@@ -1,86 +1,117 @@
-const GET_URL = 'save_url'
-const SAVE_URL = 'save_url'
-const SIGN_URL = 'save_url'
+GET_URL = "https://us-central1-whatsappbot-438418.cloudfunctions.net/ui_update"
+SET_URL = "https://us-central1-whatsappbot-438418.cloudfunctions.net/ui_save"
 
-const textEditor = document.getElementById('text-editor');
-const saveTextButton = document.getElementById('save-text');
-const imageInput = document.getElementById('image-input');
-const videoInput = document.getElementById('video-input');
-const imageContainer = document.getElementById('image-container');
-const videoContainer = document.getElementById('video-container');
+const ruleList = document.getElementById('rules');
+const toneInput = document.getElementById('tone');
+const backstoryInput = document.getElementById('backstory');
 
-let text = ""
-let media = []
-
-async function updateUI(state = null) {
-    const response = await fetch(GET_URL);
-    values = await response.json();
-    media = values.media
-    text = values.text
-    imageContainer.innerHTML = '';
-    videoContainer.innerHTML = '';
-
-    media.forEach(({url, type}) => {
-        addMedia(url, type, true)
-    });
+function addRule(val = "") {
+    console.log("val", val)
+    const elem = document.createElement('input');
+    console.log(ruleList)
+    elem.setAttribute("id", "rule-" + ruleList.children.length);
+    elem.setAttribute("type", "text");
+    elem.setAttribute("class", "input mt-2");
+    elem.setAttribute("placeholder", "What rule should I follow?");
+    ruleList.appendChild(elem);
+    elem.value = val
 }
 
-function addMedia(url, type, init = false) {
-    if (!init){
-        media.push({url, type})
+async function updateUI() {
+    try {
+        const response = await fetch(GET_URL, {
+            method: 'GET',
+        });
+
+        if (response.ok) {
+            const data = await response.json();
+            backstoryInput = data.backstory;
+            toneInput = data.tone;
+            data.rules.forEach(addRule);
+        }
+
+    } catch (error) {
+        console.error('Error fetching data:', error);
     }
-
-    const elem = document.createElement(type == 'image' ? 'img' : type);
-    elem.setAttribute("id", url);
-    elem.src = item.url;
-    elem.width = 200;
-
-    if (type === 'video') {
-        elem.controls = true;
-    }
-    mediaContainer.appendChild(elem);
 }
 
+async function save() {
+    const payload = {
+      backstory: backstoryInput.value,
+      tone: toneInput.value,
+      rules: Array.from(ruleList.querySelectorAll('input')).map(input => input.value)
+    };
 
-function deleteMedia(file) {
-    media = media.filter(({url}) => file.url != url)
-    document.getElementById(file.url).remove()
-}
-
-async function save(values) {
-    let response = await fetch(SAVE_URL, {
+    try {
+      const response = await fetch(SET_URL, {
         method: 'POST',
         headers: {
-            'Content-Type': 'application/json',
+          'Content-Type': 'application/json',
         },
-        body: JSON.stringify(values),
-    });
+        body: JSON.stringify(payload),
+      });
 
-    return await response.json();
+      if (response.ok) {
+        console.log('Data saved successfully');
+      }
+    } catch (error) {
+      console.error('Error saving data:', error);
+    }
 }
 
-async function uploadToGCS(event) {
-    const file = event.target.files[0];
-    const response = await fetch(`${SIGN_URL}?fileName=${file.name}&contentType=${file.type}`);
-    const data = await response.json();
+updateUI()
 
-    await fetch(data.url, {
-        method: 'PUT',
-        headers: {
-            'Content-Type': file.type,
-        },
-        body: file,
-    });
+// Updae UI fn
+// media = values.media
+// mediaContainer.innerHTML = '';
+// media.forEach(({url, type = "image"}) => {
+//     addMedia(url, type)
+// });
 
-    addMedia(data.url.split('?')[0], file.type)
-    await save({ text, media })
-}
 
-saveTextButton.addEventListener('click', async () => {
-    text = textEditor.textContent
-    await save({ text, media })
-});
+// const mediaInput = document.getElementById('media-input');
+// const mediaContainer = document.getElementById('media-container');
+// let media = []
 
-imageInput.addEventListener('change', uploadToGCS);
 
-videoInput.addEventListener('change', uploadToGCS);
+// async function uploadToGCS(event) {
+//     const file = event.target.files[0];
+//     const response = await fetch(`${SIGN_URL}?fileName=${file.name}&contentType=${file.type}`);
+//     const data = await response.json();
+
+//     await fetch(data.url, {
+//         method: 'PUT',
+//         headers: {
+//             'Content-Type': file.type,
+//         },
+//         body: file,
+//     });
+
+//     addMedia(data.url.split('?')[0], file.type)
+//     await save({ text, media })
+// }
+
+// function addMedia(url, type) {
+//     if (!media.some(m => m.name === url)){
+//         media.push({url, type})
+//     }
+
+//     const elem = document.createElement(type == 'image' ? 'img' : type);
+//     elem.setAttribute("id", url);
+//     elem.src = item.url;
+//     elem.width = 200;
+
+//     if (type === 'video') {
+//         elem.controls = true;
+//     }
+//     mediaContainer.appendChild(elem);
+// }
+
+
+// function deleteMedia(file) {
+//     media = media.filter(({url}) => file.url != url)
+//     document.getElementById(file.url).remove()
+// }
+
+// mediaInput.addEventListener('change', uploadToGCS);
+
