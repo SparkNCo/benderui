@@ -1,5 +1,6 @@
 GET_URL = "https://us-central1-whatsappbot-438418.cloudfunctions.net/ui_update"
 SET_URL = "https://us-central1-whatsappbot-438418.cloudfunctions.net/ui_save"
+NAME = 'sofia-test'
 
 const ruleList = document.getElementById('rules');
 const toneInput = document.getElementById('tone');
@@ -19,14 +20,14 @@ function addRule(val = "") {
 
 async function updateUI() {
     try {
-        const response = await fetch(GET_URL, {
+        const response = await fetch(`${GET_URL}?name=${encodeURIComponent(NAME)}`, {
             method: 'GET',
         });
 
         if (response.ok) {
             const data = await response.json();
-            backstoryInput = data.backstory;
-            toneInput = data.tone;
+            backstoryInput.value = data.backstory;
+            toneInput.value = data.tone;
             data.rules.forEach(addRule);
         }
 
@@ -39,7 +40,7 @@ async function save() {
     const payload = {
       backstory: backstoryInput.value,
       tone: toneInput.value,
-      rules: Array.from(ruleList.querySelectorAll('input')).map(input => input.value)
+      rules: Array.from(ruleList.querySelectorAll('input')).map(input => input.value).filter((v) => v?.length > 0 )
     };
 
     try {
