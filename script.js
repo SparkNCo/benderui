@@ -1,6 +1,6 @@
 GET_URL = "https://us-central1-whatsappbot-438418.cloudfunctions.net/ui_update"
 SET_URL = "https://us-central1-whatsappbot-438418.cloudfunctions.net/ui_save"
-NAME = 'sofia-test'
+NAME = 'sofia'
 
 const ruleList = document.getElementById('rules');
 const toneInput = document.getElementById('tone');
